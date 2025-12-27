@@ -7,7 +7,7 @@ export const ScientificKeypad = () => {
     const { append } = useCalculatorStore();
 
     return (
-        <div className="hidden landscape:grid grid-cols-6 gap-2 pr-4 border-r border-neutral-800">
+        <div className="hidden landscape:grid grid-cols-6 gap-1 pr-4 border-r border-neutral-800">
             {/* Row 1 */}
             <CalculatorButton label="(" onClick={() => append('(')} variant="function" className="h-9 w-full text-sm rounded-full" />
             <CalculatorButton label=")" onClick={() => append(')')} variant="function" className="h-9 w-full text-sm rounded-full" />
