@@ -11,18 +11,23 @@ export default function Home() {
   const { append, deleteLast, clear, calculate } = useCalculatorStore();
 
   return (
-    <div className="min-h-screen bg-ios-bg text-ios-text-white flex flex-col items-center justify-end pb-8 sm:pb-12 safe-area-inset-bottom overflow-hidden">
+    <div className="min-h-screen bg-ios-bg text-ios-text-white flex flex-col items-center justify-end pt-[calc(env(safe-area-inset-top)+20px)] pb-8 sm:pb-12 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] safe-area-inset-bottom overflow-hidden">
 
-      {/* History Area (Expands to fill available space) */}
-      <HistoryList />
+      {/* History & Display Container (Flex-grow to fill available space, but allow proper sizing) */}
+      <div className="w-full flex-1 flex flex-col justify-end min-h-0 mb-4 landscape:mb-2">
 
-      {/* Main Display Area */}
-      <div className="w-full max-w-sm landscape:max-w-4xl px-4 mb-2">
-        <Display />
+        {/* History Area */}
+        <HistoryList />
+
+        {/* Main Display Area */}
+        <div className="w-full max-w-sm landscape:max-w-4xl px-4 mx-auto flex-shrink-0">
+          <Display />
+        </div>
+
       </div>
 
       {/* Keypad Container (Flex for landscape split) */}
-      <div className="flex flex-row w-full max-w-sm landscape:max-w-5xl px-4 gap-4">
+      <div className="flex flex-row w-full max-w-sm landscape:max-w-5xl px-4 gap-4 mx-auto justify-center flex-shrink-0">
 
         {/* Scientific Keypad (Hidden in Portrait) */}
         <ScientificKeypad />

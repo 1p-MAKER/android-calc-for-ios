@@ -49,18 +49,37 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
         const { expression, isCalculated } = get();
 
         let newExpression = expression;
-        // 演算子、または関数括弧の開始
-        const isOperatorOrFunction = ['+', '-', '*', '/', '%', '^', '!', '('].includes(value) || value.endsWith('(');
+        // 演算子かどうか判定
+        const isOperator = ['+', '-', '*', '/', '%', '^'].includes(value);
 
+        // 計算完了直後の処理
         if (isCalculated) {
-            if (isOperatorOrFunction) {
+            if (isOperator) {
                 // 結果を引き継ぐ (例: 結果10に + を押すと "10+")
                 newExpression = get().displayValue;
+                set({ isCalculated: false }); // ここでフラグを折る
             } else {
-                // 新しい式
+                // 新しい式としてリセット
                 newExpression = '';
+                set({ isCalculated: false });
             }
-            set({ isCalculated: false });
+        }
+
+        // 演算子の連続入力制御 (Android挙動: 最後が演算子なら置き換える)
+        // ただし、'(' や関数の場合は置き換えない
+        if (isOperator && newExpression.length > 0) {
+            const lastChar = newExpression.slice(-1);
+            const isLastCharOperator = ['+', '-', '*', '/', '%', '^'].includes(lastChar);
+
+            if (isLastCharOperator) {
+                // 末尾を削除して新しい演算子に置き換え
+                newExpression = newExpression.slice(0, -1) + value;
+                set({
+                    expression: newExpression,
+                    displayValue: newExpression
+                });
+                return;
+            }
         }
 
         // 文字列連結
@@ -108,7 +127,7 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
 
         try {
             // 表示用演算子をプログラム用に置換
-            const sanitized = expression
+            let sanitized = expression
                 .replace(/×/g, '*')
                 .replace(/÷/g, '/')
                 .replace(/π/g, 'pi')
@@ -117,6 +136,13 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
                 .replace(/√\(([^)]+)\)/g, 'sqrt($1)') // √x -> sqrt(x)
                 .replace(/√(\d+)/g, 'sqrt($1)'); // 簡易対応
 
+            // 括弧のバランス調整 (自動補完)
+            const openParens = (sanitized.match(/\(/g) || []).length;
+            const closeParens = (sanitized.match(/\)/g) || []).length;
+            if (openParens > closeParens) {
+                sanitized += ')'.repeat(openParens - closeParens);
+            }
+
             // 数式評価 (Degree Scopeを使用)
             const resultNum = math.evaluate(sanitized, degreeScope);
 
@@ -124,7 +150,7 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
             const resultStr = math.format(resultNum, { precision: 12, lowerExp: -9, upperExp: 9 });
 
             const newItem: HistoryItem = {
-                expression: expression,
+                expression: expression, // 履歴には補完前の（ユーザー入力のままの）式を残すのが一般的
                 result: resultStr,
                 timestamp: Date.now(),
             };
