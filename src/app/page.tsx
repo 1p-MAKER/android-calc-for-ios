@@ -11,7 +11,7 @@ export default function Home() {
   const { append, deleteLast, clear, calculate } = useCalculatorStore();
 
   return (
-    <div className="min-h-screen bg-ios-bg text-ios-text-white flex flex-col items-center justify-end pt-[calc(env(safe-area-inset-top)+20px)] pb-8 sm:pb-12 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] safe-area-inset-bottom overflow-hidden">
+    <div className="min-h-screen bg-ios-bg text-ios-text-white flex flex-col items-center justify-end pt-[calc(env(safe-area-inset-top)+20px)] landscape:pt-[env(safe-area-inset-top)] pb-8 landscape:pb-2 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] safe-area-inset-bottom overflow-hidden">
 
       {/* History & Display Container (Flex-grow to fill available space, but allow proper sizing) */}
       <div className="w-full flex-1 flex flex-col justify-end min-h-0 mb-4 landscape:mb-2">
@@ -27,125 +27,125 @@ export default function Home() {
       </div>
 
       {/* Keypad Container (Flex for landscape split) */}
-      <div className="flex flex-row w-full max-w-sm landscape:max-w-5xl px-4 gap-2 mx-auto justify-center flex-shrink-0">
+      <div className="flex flex-row w-full max-w-sm landscape:max-w-5xl px-4 gap-1.5 mx-auto justify-center flex-shrink-0">
 
         {/* Scientific Keypad (Hidden in Portrait) */}
         <ScientificKeypad />
 
         {/* Standard Keypad */}
-        <div className="grid grid-cols-4 gap-3 md:gap-4 landscape:gap-2 w-full landscape:w-[40%]">
+        <div className="grid grid-cols-4 gap-3 md:gap-4 landscape:gap-1.5 w-full landscape:w-[40%]">
           {/* Row 1 */}
           <CalculatorButton
             label="AC"
             onClick={clear}
             variant="function"
-            className="landscape:h-10 landscape:text-base"
+            className="landscape:h-8 landscape:text-sm"
           />
           <CalculatorButton
             label="Del"
             onClick={deleteLast}
             variant="function"
-            icon={<Delete className="w-8 h-8 landscape:w-5 landscape:h-5" />}
-            className="landscape:h-10"
+            icon={<Delete className="w-8 h-8 landscape:w-4 landscape:h-4" />}
+            className="landscape:h-8"
           />
           <CalculatorButton
             label="%"
             onClick={() => append('%')}
             variant="function"
-            className="landscape:h-10 landscape:text-base"
+            className="landscape:h-8 landscape:text-sm"
           />
           <CalculatorButton
             label="÷"
             onClick={() => append('/')}
             variant="operator"
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
 
           {/* Row 2 */}
           <CalculatorButton
             label="7"
             onClick={() => append('7')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="8"
             onClick={() => append('8')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="9"
             onClick={() => append('9')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="×"
             onClick={() => append('*')}
             variant="operator"
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
 
           {/* Row 3 */}
           <CalculatorButton
             label="4"
             onClick={() => append('4')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="5"
             onClick={() => append('5')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="6"
             onClick={() => append('6')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="-"
             onClick={() => append('-')}
             variant="operator"
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
 
           {/* Row 4 */}
           <CalculatorButton
             label="1"
             onClick={() => append('1')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="2"
             onClick={() => append('2')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="3"
             onClick={() => append('3')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
           <CalculatorButton
             label="+"
             onClick={() => append('+')}
             variant="operator"
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-lg"
           />
 
           {/* Row 5 */}
           <CalculatorButton
             label="0"
             onClick={() => append('0')}
-            className="col-span-2 w-auto pl-8 justify-start landscape:h-10 landscape:pl-6 landscape:text-xl"
+            className="col-span-2 w-auto pl-8 justify-start landscape:h-8 landscape:pl-4 landscape:text-lg"
           />
           <CalculatorButton
             label="."
             onClick={() => append('.')}
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-xl"
           />
           <CalculatorButton
             label="="
             onClick={calculate}
             variant="operator"
-            className="landscape:h-10 landscape:text-xl"
+            className="landscape:h-8 landscape:text-xl"
           />
         </div>
       </div>
