@@ -37,14 +37,14 @@ export const CalculatorButton = ({
     const getVariantClasses = (v: ButtonVariant) => {
         switch (v) {
             case 'function':
-                return 'bg-ios-btn-light text-black active:bg-ios-btn-light-active rounded-2xl';
+                return 'bg-ios-btn-light text-black active:bg-ios-btn-light-active rounded-xl';
             case 'operator':
-                return 'bg-ios-btn-orange text-white active:bg-ios-btn-orange-active rounded-2xl';
+                return 'bg-ios-btn-orange text-white active:bg-ios-btn-orange-active rounded-xl';
             case 'operator-active': // 選択中の演算子（iOS風の色反転などは今回保留、シンプルには明るくする）
-                return 'bg-ios-text-white text-ios-btn-orange rounded-2xl';
+                return 'bg-ios-text-white text-ios-btn-orange rounded-xl';
             case 'number':
             default:
-                return 'bg-ios-btn-gray text-white active:bg-ios-btn-gray-active rounded-2xl';
+                return 'bg-ios-btn-gray text-white active:bg-ios-btn-gray-active rounded-xl';
         }
     };
 
