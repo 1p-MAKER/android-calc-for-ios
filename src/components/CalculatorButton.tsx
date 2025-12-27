@@ -37,14 +37,14 @@ export const CalculatorButton = ({
     const getVariantClasses = (v: ButtonVariant) => {
         switch (v) {
             case 'function':
-                return 'bg-ios-btn-light text-black active:bg-ios-btn-light-active';
+                return 'bg-ios-btn-light text-black active:bg-ios-btn-light-active rounded-2xl';
             case 'operator':
-                return 'bg-ios-btn-orange text-white active:bg-ios-btn-orange-active';
+                return 'bg-ios-btn-orange text-white active:bg-ios-btn-orange-active rounded-2xl';
             case 'operator-active': // 選択中の演算子（iOS風の色反転などは今回保留、シンプルには明るくする）
-                return 'bg-ios-text-white text-ios-btn-orange';
+                return 'bg-ios-text-white text-ios-btn-orange rounded-2xl';
             case 'number':
             default:
-                return 'bg-ios-btn-gray text-white active:bg-ios-btn-gray-active';
+                return 'bg-ios-btn-dark text-white active:bg-ios-btn-dark-active rounded-2xl';
         }
     };
 
@@ -52,12 +52,16 @@ export const CalculatorButton = ({
         <button
             onClick={handlePress}
             className={cn(
-                'h-20 w-20 rounded-full text-3xl font-medium transition-colors duration-100 flex items-center justify-center',
-                getVariantClasses(variant),
-                className
+                "w-full h-full p-[3px] bg-transparent touch-manipulation select-none outline-none",
+                className // Allow external sizing classes (h-9 etc) to apply to the button wrapper
             )}
         >
-            {icon ? icon : label}
+            <div className={cn(
+                "w-full h-full flex items-center justify-center font-medium transition-colors text-3xl",
+                getVariantClasses(variant),
+            )}>
+                {icon ? icon : label}
+            </div>
         </button>
     );
 };
