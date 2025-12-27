@@ -44,7 +44,7 @@ export const CalculatorButton = ({
                 return 'bg-ios-text-white text-ios-btn-orange rounded-2xl';
             case 'number':
             default:
-                return 'bg-ios-btn-dark text-white active:bg-ios-btn-dark-active rounded-2xl';
+                return 'bg-ios-btn-gray text-white active:bg-ios-btn-gray-active rounded-2xl';
         }
     };
 
