@@ -1,12 +1,8 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600&display=swap');
 
 :root {
   --background: #000000;
   --foreground: #ffffff;
-
-  --font-nunito: 'Nunito', sans-serif;
-  --font-sans: var(--font-nunito);
 
   /* iOS Calculator Palette */
   --ios-bg: #000000;
@@ -43,7 +39,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-nunito), -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Helvetica Neue", sans-serif;
   user-select: none;
   /* アプリっぽく選択不可に */
   -webkit-touch-callout: none;
