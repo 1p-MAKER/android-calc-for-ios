@@ -50,7 +50,7 @@ export const CalculatorButton = ({
         <button
             onClick={handlePress}
             className={cn(
-                "w-full h-full p-[6px] bg-transparent touch-manipulation select-none outline-none",
+                "w-full h-full p-[1px] bg-transparent touch-manipulation select-none outline-none",
                 className
             )}
         >
