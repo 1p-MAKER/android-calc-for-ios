@@ -12,25 +12,23 @@ type ButtonVariant = 'number' | 'function' | 'operator' | 'operator-active';
 interface CalculatorButtonProps {
     label: string;
     onClick: () => void;
+    className?: string;
     variant?: ButtonVariant;
-    className?: string; // col-span-2 などのために
-    icon?: React.ReactNode; // Backspace用
+    icon?: React.ReactNode;
+    textClass?: string; // Additional class specifically for the inner text/icon
 }
 
 export const CalculatorButton = ({
     label,
     onClick,
-    variant = 'number',
     className,
+    variant = 'number',
     icon,
+    textClass,
 }: CalculatorButtonProps) => {
 
-    const handlePress = async () => {
-        try {
-            await Haptics.impact({ style: ImpactStyle.Light });
-        } catch {
-            // Web or non-supported environment: ignore
-        }
+    const handlePress = () => {
+        // Haptics.impact({ style: ImpactStyle.Light });
         onClick();
     };
 
@@ -52,14 +50,14 @@ export const CalculatorButton = ({
         <button
             onClick={handlePress}
             className={cn(
-                "w-full h-full p-[3px] bg-transparent touch-manipulation select-none outline-none",
-                className // Allow external sizing classes (h-9 etc) to apply to the button wrapper
+                "w-full h-full p-[6px] bg-transparent touch-manipulation select-none outline-none",
+                className
             )}
         >
             <div className={cn(
                 "w-full h-full flex items-center justify-center font-medium transition-colors text-3xl",
                 getVariantClasses(variant),
-                className // Pass className to inner div so text size overrides work
+                textClass // Apply text styling here without affecting layout
             )}>
                 {icon ? icon : label}
             </div>
