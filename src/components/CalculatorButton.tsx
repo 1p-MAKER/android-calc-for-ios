@@ -59,6 +59,7 @@ export const CalculatorButton = ({
             <div className={cn(
                 "w-full h-full flex items-center justify-center font-medium transition-colors text-3xl",
                 getVariantClasses(variant),
+                className // Pass className to inner div so text size overrides work
             )}>
                 {icon ? icon : label}
             </div>
