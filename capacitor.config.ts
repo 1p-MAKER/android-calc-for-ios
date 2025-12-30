@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.nagi.androidcalc',
-  appName: 'Calc',
+  appName: '電卓',
   webDir: 'out'
 };
 
