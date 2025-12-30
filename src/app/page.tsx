@@ -139,7 +139,8 @@ export default function Home() {
               <CalculatorButton label="+" onClick={() => append('+')} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
 
               {/* Row 5 */}
-              <CalculatorButton label="0" onClick={() => append('0')} className="col-span-2 w-auto pl-8 justify-start h-24 landscape:h-9 landscape:pl-4 landscape:text-2xl" />
+              <CalculatorButton label="0" onClick={() => append('0')} className="h-24 landscape:h-9 landscape:text-2xl" />
+              <CalculatorButton label="00" onClick={() => append('00')} className="h-24 landscape:h-9 landscape:text-2xl" />
               <CalculatorButton label="." onClick={() => append('.')} className="h-24 landscape:h-9 landscape:text-2xl" />
               <CalculatorButton label="=" onClick={calculate} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
             </div>
