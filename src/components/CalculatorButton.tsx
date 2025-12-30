@@ -60,7 +60,12 @@ export const CalculatorButton = ({
         if (isSoundEnabled) {
             playClickSound();
         }
-        // Haptics.impact({ style: ImpactStyle.Light });
+        // バイブレーション（コメントアウト解除）
+        try {
+            Haptics.impact({ style: ImpactStyle.Light });
+        } catch (e) {
+            // WebなどHaptics非対応環境でのエラーを無視
+        }
         onClick();
     };
 
