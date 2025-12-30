@@ -5,17 +5,55 @@ import { Display } from '@/components/Display';
 import { HistoryList } from '@/components/HistoryList';
 import { ScientificKeypad } from '@/components/ScientificKeypad';
 import { useCalculatorStore } from '@/store/calculatorStore';
-import { Delete } from 'lucide-react';
+import { Delete, Settings, X, ExternalLink } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Home() {
   const { append, deleteLast, clear, calculate } = useCalculatorStore();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const openSupportPage = () => {
+    window.open('https://scented-zinc-a47.notion.site/2d9768aba03f80859597d0f99cdb1d5f', '_blank');
+  };
 
   return (
-    <div className="h-screen max-h-screen bg-ios-bg text-ios-text-white flex flex-col landscape:flex-row pt-[calc(env(safe-area-inset-top)+20px)] landscape:pt-[env(safe-area-inset-top)] pb-8 landscape:pb-0 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] safe-area-inset-bottom overflow-hidden">
+    <div className="h-screen max-h-screen bg-ios-bg text-ios-text-white flex flex-col landscape:flex-row pt-[calc(env(safe-area-inset-top)+20px)] landscape:pt-[env(safe-area-inset-top)] pb-8 landscape:pb-0 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] safe-area-inset-bottom overflow-hidden relative">
+
+      {/* Settings Modal */}
+      {isSettingsOpen && (
+        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-neutral-900 w-full max-w-sm rounded-2xl overflow-hidden border border-neutral-800 shadow-2xl">
+            <div className="flex items-center justify-between p-4 border-b border-neutral-800">
+              <h2 className="text-lg font-semibold">Settings</h2>
+              <button onClick={() => setIsSettingsOpen(false)} className="p-2 bg-neutral-800 rounded-full hover:bg-neutral-700 transition-colors">
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+            <div className="p-4">
+              <button
+                onClick={openSupportPage}
+                className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
+              >
+                <span className="font-medium text-left">Support & Privacy Policy</span>
+                <ExternalLink className="w-5 h-5 text-neutral-400" />
+              </button>
+              <p className="mt-4 text-xs text-center text-neutral-500">
+                Version 1.0.0<br />
+                © 2024 DevCat
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* LEFT PANE (Landscape): History List */}
       <div className="hidden landscape:flex w-1/4 h-full border-r border-neutral-800 flex-col bg-black/20">
-        <div className="p-4 border-b border-neutral-800 text-neutral-400 text-sm font-medium">History</div>
+        <div className="p-4 border-b border-neutral-800 flex justify-between items-center text-neutral-400 text-sm font-medium">
+          <span>History</span>
+          <button onClick={() => setIsSettingsOpen(true)} className="p-1 hover:text-white transition-colors">
+            <Settings className="w-5 h-5" />
+          </button>
+        </div>
         <div className="flex-1 w-full overflow-y-auto relative">
           <div className="absolute inset-0">
             <HistoryList />
@@ -24,20 +62,25 @@ export default function Home() {
       </div>
 
       {/* RIGHT PANE (Landscape): Display + Keypad */}
-      {/* In Portrait: It's the bottom part, but here we restructure. */}
-      {/* We need to group Display and Keypad together for the left side in landscape. */}
-
       <div className="flex flex-col w-full landscape:w-3/4 h-full">
 
-        {/* 1. History Area (Portrait ONLY) - Hidden in Landscape */}
-        <div className="flex-1 w-full overflow-y-auto min-h-0 relative landscape:hidden">
-          <div className="absolute inset-0 bottom-2">
-            <HistoryList />
+        {/* 1. History Area (Portrait ONLY) */}
+        <div className="flex-1 w-full overflow-y-auto min-h-0 relative landscape:hidden flex flex-col">
+          {/* Portrait Header with Settings */}
+          <div className="flex justify-between items-center px-4 py-2 sticky top-0 z-10">
+            <div className="text-sm font-medium text-neutral-500">History</div>
+            <button onClick={() => setIsSettingsOpen(true)} className="p-2 bg-neutral-800/50 rounded-full text-neutral-400 hover:text-white transition-colors">
+              <Settings className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 relative">
+            <div className="absolute inset-0 bottom-2">
+              <HistoryList />
+            </div>
           </div>
         </div>
 
         {/* 2. Display Area */}
-        {/* In Landscape, this needs to be at the top of the Left Pane or above keypad */}
         <div className="w-full max-w-sm landscape:max-w-none landscape:w-full px-4 landscape:px-8 mx-auto flex-shrink-0 mb-2 landscape:mb-4 landscape:mt-auto z-10 bg-ios-bg">
           <Display />
         </div>
@@ -45,7 +88,6 @@ export default function Home() {
         {/* 3. Keypad Area */}
         <div className="w-full flex-shrink-0 z-20 bg-ios-bg pb-safe-offset landscape:pb-6">
           <div className="flex flex-row w-full max-w-sm landscape:max-w-none landscape:w-full px-4 landscape:px-8 gap-0 mx-auto">
-
             {/* Scientific Keypad (Landscape Left) */}
             <div className="flex-1 hidden landscape:block">
               <ScientificKeypad />
@@ -85,7 +127,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
