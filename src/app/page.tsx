@@ -36,12 +36,6 @@ export default function Home() {
                 className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
               >
                 <div className="flex items-center gap-3">
-                  {/* Creating a simple speaker icon inline or using Lucide if available, 
-                       but the user requested 'all features'. Let's reuse Lucide's Volume2/VolumeX if we imported them, 
-                       or just text 'Sound'. We'll use text for clarity and simplicity as no new icon import requested yet, 
-                       Wait, I can import Volume2. Let's stick to text for minimal changes or check imports.
-                       Actually, I'll just use text "Keyboard Sound" and a visual toggle.
-                   */}
                   <span className="font-medium">Keyboard Sound</span>
                 </div>
                 <div className={`w-12 h-7 rounded-full transition-colors relative ${isSoundEnabled ? 'bg-green-500' : 'bg-neutral-600'}`}>
@@ -53,7 +47,9 @@ export default function Home() {
                 onClick={openSupportPage}
                 className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
               >
-                <span className="font-medium text-left">Support & Privacy Policy</span>
+                <div className="flex items-center gap-3">
+                  <span className="font-medium text-left">Support & Privacy Policy</span>
+                </div>
                 <ExternalLink className="w-5 h-5 text-neutral-400" />
               </button>
               <p className="mt-4 text-xs text-center text-neutral-500">
@@ -66,7 +62,7 @@ export default function Home() {
       )}
 
       {/* LEFT PANE (Landscape): History List */}
-      <div className="hidden landscape:flex w-1/4 h-full border-r border-neutral-800 flex-col bg-black/20">
+      <div className="hidden landscape:flex w-[30%] h-full border-r border-neutral-800 flex-col bg-black/20">
         <div className="p-4 border-b border-neutral-800 flex justify-between items-center text-neutral-400 text-sm font-medium">
           <span>History</span>
           <button onClick={() => setIsSettingsOpen(true)} className="p-1 hover:text-white transition-colors">
@@ -81,10 +77,10 @@ export default function Home() {
       </div>
 
       {/* RIGHT PANE (Landscape): Display + Keypad */}
-      <div className="flex flex-col w-full landscape:w-3/4 h-full">
+      <div className="flex flex-col w-full landscape:w-[70%] h-full">
 
         {/* 1. History Area (Portrait ONLY) */}
-        <div className="flex-1 w-full overflow-y-auto min-h-0 relative landscape:hidden flex flex-col">
+        <div className="flex-[0.8] w-full overflow-y-auto min-h-[20%] relative landscape:hidden flex flex-col">
           {/* Portrait Header with Settings */}
           <div className="flex justify-between items-center px-4 py-2 sticky top-0 z-10">
             <div className="text-sm font-medium text-neutral-500">History</div>
@@ -100,49 +96,51 @@ export default function Home() {
         </div>
 
         {/* 2. Display Area */}
-        <div className="w-full max-w-sm landscape:max-w-none landscape:w-full px-4 landscape:px-8 mx-auto flex-shrink-0 mb-2 landscape:mb-4 landscape:mt-auto z-10 bg-ios-bg">
+        {/* iPad Portrait: Increase height slightly. Flex basis auto or grow */}
+        <div className="w-full px-4 landscape:px-8 mx-auto flex-shrink-0 mb-2 landscape:mb-0 z-10 bg-ios-bg flex flex-col justify-end landscape:h-[25%] md:landscape:h-[30%]">
           <Display />
         </div>
 
-        {/* 3. Keypad Area */}
-        <div className="w-full flex-shrink-0 z-20 bg-ios-bg pb-safe-offset landscape:pb-6">
-          <div className="flex flex-row w-full max-w-sm landscape:max-w-none landscape:w-full px-4 landscape:px-8 gap-0 mx-auto">
+        {/* 3. Keypad Area (Fills remaining space) */}
+        <div className="flex-1 w-full min-h-0 z-20 bg-ios-bg pb-safe-offset landscape:pb-4 flex flex-col justify-end">
+          <div className="flex flex-row w-full h-full landscape:px-8 gap-2 mx-auto">
             {/* Scientific Keypad (Landscape Left) */}
-            <div className="flex-1 hidden landscape:block">
+            <div className="flex-1 hidden landscape:block h-full">
               <ScientificKeypad />
             </div>
 
             {/* Standard Keypad */}
-            <div className="grid grid-cols-4 gap-0 landscape:gap-0 w-full landscape:w-[40%]">
+            {/* grid-rows-5 for 5 rows. h-full to fill height. */}
+            <div className="grid grid-cols-4 grid-rows-5 gap-[1px] landscape:gap-1 w-full landscape:w-[55%] h-full">
               {/* Row 1 */}
-              <CalculatorButton label="AC" onClick={clear} variant="function" className="h-24 landscape:h-9 landscape:text-xl" />
-              <CalculatorButton label="Del" onClick={deleteLast} variant="function" icon={<Delete className="w-8 h-8 landscape:w-6 landscape:h-6" />} className="h-24 landscape:h-9" />
-              <CalculatorButton label="%" onClick={() => append('%')} variant="function" className="h-24 landscape:h-9 landscape:text-xl" />
-              <CalculatorButton label="÷" onClick={() => append('/')} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
+              <CalculatorButton label="AC" onClick={clear} variant="function" className="text-3xl md:text-5xl landscape:text-xl" />
+              <CalculatorButton label="Del" onClick={deleteLast} variant="function" icon={<Delete className="w-8 h-8 md:w-12 md:h-12 landscape:w-6 landscape:h-6" />} className="" />
+              <CalculatorButton label="%" onClick={() => append('%')} variant="function" className="text-3xl md:text-5xl landscape:text-xl" />
+              <CalculatorButton label="÷" onClick={() => append('/')} variant="operator" className="text-4xl md:text-6xl landscape:text-2xl" />
 
               {/* Row 2 */}
-              <CalculatorButton label="7" onClick={() => append('7')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="8" onClick={() => append('8')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="9" onClick={() => append('9')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="×" onClick={() => append('*')} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
+              <CalculatorButton label="7" onClick={() => append('7')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="8" onClick={() => append('8')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="9" onClick={() => append('9')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="×" onClick={() => append('*')} variant="operator" className="text-4xl md:text-6xl landscape:text-2xl" />
 
               {/* Row 3 */}
-              <CalculatorButton label="4" onClick={() => append('4')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="5" onClick={() => append('5')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="6" onClick={() => append('6')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="-" onClick={() => append('-')} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
+              <CalculatorButton label="4" onClick={() => append('4')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="5" onClick={() => append('5')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="6" onClick={() => append('6')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="-" onClick={() => append('-')} variant="operator" className="text-4xl md:text-6xl landscape:text-2xl" />
 
               {/* Row 4 */}
-              <CalculatorButton label="1" onClick={() => append('1')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="2" onClick={() => append('2')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="3" onClick={() => append('3')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="+" onClick={() => append('+')} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
+              <CalculatorButton label="1" onClick={() => append('1')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="2" onClick={() => append('2')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="3" onClick={() => append('3')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="+" onClick={() => append('+')} variant="operator" className="text-4xl md:text-6xl landscape:text-2xl" />
 
               {/* Row 5 */}
-              <CalculatorButton label="0" onClick={() => append('0')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="00" onClick={() => append('00')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="." onClick={() => append('.')} className="h-24 landscape:h-9 landscape:text-2xl" />
-              <CalculatorButton label="=" onClick={calculate} variant="operator" className="h-24 landscape:h-9 landscape:text-2xl" />
+              <CalculatorButton label="0" onClick={() => append('0')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="00" onClick={() => append('00')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="." onClick={() => append('.')} className="text-4xl md:text-6xl landscape:text-2xl" />
+              <CalculatorButton label="=" onClick={calculate} variant="operator" className="text-4xl md:text-6xl landscape:text-2xl" />
             </div>
           </div>
         </div>
