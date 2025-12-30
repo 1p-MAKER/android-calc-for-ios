@@ -3,10 +3,9 @@
 import { useCalculatorStore } from '@/store/calculatorStore';
 import { useEffect, useRef, useState } from 'react';
 
-// Helper: Format numbers with commas (e.g. 1234567 -> 1,234,567)
+// Helper: Format a purely numeric string with commas
 const formatNumber = (numStr: string) => {
     if (!numStr) return '';
-    // Handle exponential notation if strictly needed, but assuming standard strings mostly
     const parts = numStr.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
@@ -38,14 +37,11 @@ export const Display = () => {
         }
     };
 
-    // Formatted value for Display
-    // Note: displayValue might be an expression like "1+2" in some modes, 
-    // but the store seems to keep 'displayValue' as usually the number being typed or result.
-    // If it contains operators, simple formatNumber might break it. 
-    // Let's assume displayValue is mostly numeric or apply formatting carefully.
-    // Ideally, we format only if it looks like a number.
-    const isNumeric = (str: string) => /^-?\d*\.?\d+(e[+-]?\d+)?$/.test(str);
-    const formattedDisplay = isNumeric(displayValue) ? formatNumber(displayValue) : displayValue;
+    // Format the display value: find all number sequences and add commas
+    // This handles both "123456" and "1234+5678"
+    const formattedDisplay = displayValue.replace(/(\d+)(\.\d+)?/g, (match) => {
+        return formatNumber(match);
+    });
 
 
     // Font scaling

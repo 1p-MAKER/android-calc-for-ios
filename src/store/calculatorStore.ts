@@ -154,7 +154,8 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
             const resultNum = math.evaluate(sanitized, degreeScope);
 
             // 結果のフォーマット
-            const resultStr = math.format(resultNum, { precision: 12, lowerExp: -9, upperExp: 9 });
+            // e表記になる閾値を広げる (10^16程度までは通常表記)
+            const resultStr = math.format(resultNum, { precision: 16, lowerExp: -16, upperExp: 16 });
 
             set((state) => {
                 const history = state.history;
