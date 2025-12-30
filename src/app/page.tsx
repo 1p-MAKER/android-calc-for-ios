@@ -9,7 +9,7 @@ import { Delete, Settings, X, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Home() {
-  const { append, deleteLast, clear, calculate } = useCalculatorStore();
+  const { append, deleteLast, clear, calculate, isSoundEnabled, toggleSound } = useCalculatorStore();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const openSupportPage = () => {
@@ -29,7 +29,26 @@ export default function Home() {
                 <X className="w-5 h-5 text-white" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="p-4 space-y-3">
+              {/* Sound Toggle */}
+              <button
+                onClick={toggleSound}
+                className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
+              >
+                <div className="flex items-center gap-3">
+                  {/* Creating a simple speaker icon inline or using Lucide if available, 
+                       but the user requested 'all features'. Let's reuse Lucide's Volume2/VolumeX if we imported them, 
+                       or just text 'Sound'. We'll use text for clarity and simplicity as no new icon import requested yet, 
+                       Wait, I can import Volume2. Let's stick to text for minimal changes or check imports.
+                       Actually, I'll just use text "Keyboard Sound" and a visual toggle.
+                   */}
+                  <span className="font-medium">Keyboard Sound</span>
+                </div>
+                <div className={`w-12 h-7 rounded-full transition-colors relative ${isSoundEnabled ? 'bg-green-500' : 'bg-neutral-600'}`}>
+                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${isSoundEnabled ? 'left-6' : 'left-1'}`} />
+                </div>
+              </button>
+
               <button
                 onClick={openSupportPage}
                 className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"

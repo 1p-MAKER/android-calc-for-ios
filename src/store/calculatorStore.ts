@@ -30,6 +30,7 @@ interface CalculatorState {
     displayValue: string;
     isCalculated: boolean;
     history: HistoryItem[];
+    isSoundEnabled: boolean;
 
     // Actions
     append: (value: string) => void;
@@ -37,6 +38,7 @@ interface CalculatorState {
     clear: () => void;
     calculate: () => void;
     loadHistory: (item: HistoryItem) => void;
+    toggleSound: () => void;
 }
 
 export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
@@ -44,6 +46,11 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
     displayValue: '0',
     isCalculated: false,
     history: [],
+    isSoundEnabled: true, // Default to true
+
+    toggleSound: () => {
+        set((state) => ({ isSoundEnabled: !state.isSoundEnabled }));
+    },
 
     append: (value: string) => {
         const { expression, isCalculated } = get();
