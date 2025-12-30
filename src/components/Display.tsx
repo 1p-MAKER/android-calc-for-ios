@@ -46,22 +46,20 @@ export const Display = () => {
 
     // Font scaling
     const getPortraitFontSize = (len: number) => {
-        if (len > 13) return 'text-3xl';
-        if (len > 10) return 'text-4xl';
-        if (len > 8) return 'text-5xl';
-        if (len > 5) return 'text-6xl';
+        if (len > 12) return 'text-4xl';
+        if (len > 10) return 'text-5xl';
+        if (len > 8) return 'text-6xl';
         return 'text-7xl';
     };
 
     const getLandscapeFontSize = (len: number) => {
-        if (len > 20) return 'landscape:text-3xl';
-        if (len > 16) return 'landscape:text-4xl';
-        if (len > 13) return 'landscape:text-5xl';
-        if (len > 11) return 'landscape:text-6xl';
+        if (len > 18) return 'landscape:text-4xl';
+        if (len > 15) return 'landscape:text-5xl';
+        if (len > 12) return 'landscape:text-6xl';
         return 'landscape:text-7xl';
     };
 
-    const fontSizeClass = `${getPortraitFontSize(displayValue.length)} ${getLandscapeFontSize(displayValue.length)}`;
+    const fontSizeClass = `${getPortraitFontSize(formattedDisplay.length)} ${getLandscapeFontSize(formattedDisplay.length)}`;
 
     return (
         <div
