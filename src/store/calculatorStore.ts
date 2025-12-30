@@ -129,8 +129,10 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
     },
 
     calculate: () => {
-        const { expression } = get();
+        const { expression, isCalculated } = get();
         if (!expression) return;
+        // 計算完了直後に再度 = を押しても何もしない（履歴重複防止）
+        if (isCalculated) return;
 
         try {
             // 表示用演算子をプログラム用に置換
