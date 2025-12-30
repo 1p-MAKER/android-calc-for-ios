@@ -17,7 +17,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen max-h-screen bg-ios-bg text-ios-text-white flex flex-col landscape:flex-row pt-[calc(env(safe-area-inset-top)+20px)] landscape:pt-[env(safe-area-inset-top)] pb-8 landscape:pb-0 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] safe-area-inset-bottom overflow-hidden relative">
+    <div className="h-screen max-h-screen bg-ios-bg text-ios-text-white flex flex-col landscape:flex-row pt-[calc(env(safe-area-inset-top)+20px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pb-8 landscape:pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] overflow-hidden relative">
 
       {/* Settings Modal */}
       {isSettingsOpen && (
