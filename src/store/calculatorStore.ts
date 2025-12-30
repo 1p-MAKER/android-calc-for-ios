@@ -156,18 +156,34 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
             // 結果のフォーマット
             const resultStr = math.format(resultNum, { precision: 12, lowerExp: -9, upperExp: 9 });
 
-            const newItem: HistoryItem = {
-                expression: expression, // 履歴には補完前の（ユーザー入力のままの）式を残すのが一般的
-                result: resultStr,
-                timestamp: Date.now(),
-            };
+            set((state) => {
+                const history = state.history;
+                // 重複チェック: 直近の履歴と同じ式・結果なら履歴に追加しない
+                const lastItem = history.length > 0 ? history[0] : null;
+                const isDuplicate = lastItem && lastItem.expression === expression && lastItem.result === resultStr;
 
-            set((state) => ({
-                displayValue: resultStr,
-                expression: resultStr,
-                isCalculated: true,
-                history: [newItem, ...state.history].slice(0, 100)
-            }));
+                if (isDuplicate) {
+                    return {
+                        displayValue: resultStr,
+                        expression: resultStr,
+                        isCalculated: true,
+                        // history 更新なし
+                    };
+                }
+
+                const newItem: HistoryItem = {
+                    expression: expression,
+                    result: resultStr,
+                    timestamp: Date.now(),
+                };
+
+                return {
+                    displayValue: resultStr,
+                    expression: resultStr,
+                    isCalculated: true,
+                    history: [newItem, ...history].slice(0, 100)
+                };
+            });
 
         } catch (error) {
             console.error("Calculation Error:", error);
