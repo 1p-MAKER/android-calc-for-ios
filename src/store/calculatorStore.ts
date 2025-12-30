@@ -156,8 +156,8 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
             const resultNum = math.evaluate(sanitized, degreeScope);
 
             // 結果のフォーマット
-            // e表記になる閾値を広げる (10^16程度までは通常表記)
-            const resultStr = math.format(resultNum, { precision: 16, lowerExp: -16, upperExp: 16 });
+            // e表記になる閾値をさらに大幅に広げる (10^100まで通常表記)
+            const resultStr = math.format(resultNum, { precision: 16, lowerExp: -100, upperExp: 100 });
 
             set((state) => {
                 const history = state.history;
