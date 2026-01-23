@@ -71,7 +71,7 @@ export const Display = () => {
                 Copied
             </div>
 
-            {/* History Expression (Android-like) */}
+            {/* History Expression (Standard behavior) */}
             <div className="h-8 text-neutral-400 text-xl font-light overflow-hidden whitespace-nowrap w-full text-right flex justify-end">
                 {lastHistory ? (
                     <span className="opacity-70">{lastHistory.expression} =</span>

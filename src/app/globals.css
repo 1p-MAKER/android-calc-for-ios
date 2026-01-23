@@ -17,6 +17,9 @@
 
   --ios-btn-orange: #ff9f0a;
   --ios-btn-orange-active: #ffb84d;
+
+  /* Ad Banner Control */
+  --banner-height: 0px; /* JS側からAdManagerで動的に設定 */
 }
 
 @theme inline {

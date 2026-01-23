@@ -23,7 +23,7 @@ export const HistoryList = () => {
     return (
         <div className="w-full h-full overflow-y-auto px-4 pt-12 pb-4 space-y-4 no-scrollbar scroll-smooth">
             {/* Reverse map to show oldest to newest (bottom) if we want standard chat-like flow,
-          OR newest at top. Android calc shows history above the current input. 
+          OR newest at top. This calc shows history above the current input. 
           Let's render them in chronological order (oldest -> newest) so it flows down like chat.
       */}
             {history.slice().reverse().map((item) => (

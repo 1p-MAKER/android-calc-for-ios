@@ -4,7 +4,7 @@ import { create as createStore } from 'zustand'; // Renamed to avoid conflict
 // Math.js instance with configuration
 const math = create(all, {});
 
-// Override trigonometric functions to use Degrees by default (Android behavior)
+// Override trigonometric functions to use Degrees by default
 // We pass these functions into the scope of evaluate()
 const degreeScope = {
     sin: (x: number) => math.sin(math.unit(x, 'deg')),
@@ -72,7 +72,7 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
             }
         }
 
-        // 演算子の連続入力制御 (Android挙動: 最後が演算子なら置き換える)
+        // 演算子の連続入力制御 (標準的な挙動: 最後が演算子なら置き換える)
         // ただし、'(' や関数の場合は置き換えない
         if (isOperator && newExpression.length > 0) {
             const lastChar = newExpression.slice(-1);
@@ -196,7 +196,7 @@ export const useCalculatorStore = createStore<CalculatorState>((set, get) => ({
 
     loadHistory: (item) => {
         set({
-            expression: item.result, // 結果を呼び出すか、式を呼び出すか。Androidは「結果」を使うことが多い
+            expression: item.result, // 結果を呼び出すか、式を呼び出すか。標準的には「結果」を使うことが多い
             displayValue: item.result,
             isCalculated: true // 次の入力でクリアされるように
         });
