@@ -1,16 +1,12 @@
+import Foundation
 import Capacitor
-import CapacitorPluginAppTrackingTransparency
-import RevenueCatPurchases
 
 class MyViewController: CAPBridgeViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override open func capacitorDidLoad() {
+        super.capacitorDidLoad()
         
-        // 手動でプラグインを登録
-        // ATT (App Tracking Transparency)
-        bridge?.registerPluginInstance(AppTrackingTransparencyPlugin())
-        
-        // RevenueCat (In-App Purchases)
-        bridge?.registerPluginInstance(PurchasesPlugin())
+        // Capacitor 7/8では自動登録されるため、手動登録は不要
+        // プラグインはPackage.swiftで管理される
+        print("[MyViewController] Capacitor loaded successfully")
     }
 }
