@@ -283,7 +283,7 @@ export default function Home() {
         <div className="flex flex-col w-full landscape:w-[70%] h-full">
 
           {/* 1. History Area (Portrait ONLY) */}
-          <div className="flex-[0.8] w-full overflow-y-auto min-h-[20%] relative landscape:hidden flex flex-col">
+          <div className="flex-[0.5] w-full overflow-y-auto min-h-[15%] relative landscape:hidden flex flex-col">
             {/* Portrait Header with Settings */}
             <div className="flex justify-between items-center px-4 py-2 sticky top-0 z-10">
               <div className="text-sm font-medium text-neutral-500">History</div>
