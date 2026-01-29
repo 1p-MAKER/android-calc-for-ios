@@ -121,7 +121,7 @@ export default function Home() {
     <div className="h-screen w-screen overflow-hidden flex flex-col bg-ios-bg relative">
 
       {/* App Content: Takes remaining space */}
-      <div className="flex-1 w-full flex flex-col landscape:flex-row relative min-h-0 pt-[calc(env(safe-area-inset-top)+20px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] pb-[env(safe-area-inset-bottom)] landscape:pb-[env(safe-area-inset-bottom)]">
+      <div className="flex-1 w-full flex flex-col landscape:flex-row relative min-h-0 pt-[max(env(safe-area-inset-top),50px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] pb-[120px] landscape:pb-[env(safe-area-inset-bottom)]">
 
         {/* Settings Modal */}
         {isSettingsOpen && (
@@ -285,7 +285,7 @@ export default function Home() {
           {/* 1. History Area (Portrait ONLY) */}
           <div className="flex-[0.5] w-full overflow-y-auto min-h-[15%] relative landscape:hidden flex flex-col">
             {/* Portrait Header with Settings */}
-            <div className="flex justify-between items-center px-4 py-3 sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-neutral-800/50">
+            <div className="flex justify-between items-center px-4 pt-14 pb-3 sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-neutral-800/50">
               <div className="text-sm font-medium text-neutral-500">History</div>
               <button onClick={() => setIsSettingsOpen(true)} className="p-2 bg-neutral-800/50 rounded-full text-neutral-400 hover:text-white transition-colors">
                 <Settings className="w-5 h-5" />
