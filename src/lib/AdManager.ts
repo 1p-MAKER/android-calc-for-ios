@@ -6,6 +6,7 @@
 import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, AdOptions, RewardAdOptions, AdLoadInfo, AdMobRewardItem } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { AD_CONFIG, BANNER_HEIGHT } from './AdConfig';
+import { AppTrackingTransparency } from 'capacitor-plugin-app-tracking-transparency';
 
 // Platform detection
 const isIOS = Capacitor.getPlatform() === 'ios';
@@ -19,6 +20,17 @@ export async function initializeAdMob(): Promise<void> {
     if (!isNative) {
         console.log('[AdManager] Web環境のため初期化スキップ');
         return;
+    }
+
+    // iOS: ATT (App Tracking Transparency) リクエスト
+    if (isIOS) {
+        try {
+            const { status } = await AppTrackingTransparency.requestPermission();
+            console.log('[AdManager] ATT Status:', status);
+        } catch (error) {
+            console.error('[AdManager] ATT Error:', error);
+            // ATT失敗でも広告初期化は継続
+        }
     }
 
     try {

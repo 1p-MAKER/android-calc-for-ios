@@ -5,6 +5,9 @@
 
 // Google AdMob Unit IDs
 // App ID: ca-app-pub-7451636850767521~9704584608
+
+// IAP Product IDs (要App Store Connect登録)
+export const IAP_PRODUCT_ID = 'com.nagi.formula-calc.premium';
 export const AD_CONFIG = {
     // Banner Ads
     BANNER_ID_IOS: 'ca-app-pub-7451636850767521/5274385009',
@@ -24,7 +27,7 @@ export const AD_CONFIG = {
 
     // Debug Settings
     DEBUG_REWARD_DURATION_MS: 60 * 1000, // デバッグ用: 1分間
-    IS_TEST_MODE: true, // ⚠️ 本番リリース時（実機確認時）は false に変更すること
+    IS_TEST_MODE: false, // 本番モード（実機で本番広告を表示）
 } as const;
 
 // Storage Keys for persistence

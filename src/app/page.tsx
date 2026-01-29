@@ -7,9 +7,10 @@ import { ScientificKeypad } from '@/components/ScientificKeypad';
 import { useCalculatorStore } from '@/store/calculatorStore';
 import { useAdStore } from '@/store/adStore';
 import { showInterstitial, showRewardVideo } from '@/lib/AdManager';
+import { purchasePremium, getProductPrice, restorePurchases, initializeRevenueCat } from '@/lib/IAPManager';
 import { AdBanner } from '@/components/AdBanner';
 import { Delete, Settings, X, ExternalLink, Gift, Calculator, LayoutGrid, Share2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const { append, deleteLast, clear, calculate, isSoundEnabled, toggleSound } = useCalculatorStore();
@@ -19,12 +20,23 @@ export default function Home() {
     grantRewardAdFree,
     isPremium,
     setPremium,
-    togglePremiumDebug,
     adFreeUntil
   } = useAdStore();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isRewardLoading, setIsRewardLoading] = useState(false);
+  const [isPurchaseLoading, setIsPurchaseLoading] = useState(false);
+  const [productPrice, setProductPrice] = useState('¥---');
+
+  // RevenueCat初期化と価格取得
+  useEffect(() => {
+    const init = async () => {
+      await initializeRevenueCat();
+      const price = await getProductPrice();
+      setProductPrice(price);
+    };
+    init();
+  }, []);
 
   // 計算実行時のラッパー関数
   const handleCalculate = async () => {
@@ -72,9 +84,30 @@ export default function Home() {
     setIsRewardLoading(true);
     await showRewardVideo((reward) => {
       grantRewardAdFree();
-      alert('24時間広告なしになりました！');
+      alert('🎉 24時間広告なしになりました！');
     });
     setIsRewardLoading(false);
+  };
+
+  const handlePurchase = async () => {
+    setIsPurchaseLoading(true);
+    const result = await purchasePremium();
+    setIsPurchaseLoading(false);
+
+    if (result.success) {
+      setPremium(true);
+      alert('🎉 ' + result.message);
+    } else if (result.message) {
+      alert(result.message);
+    }
+  };
+
+  const handleRestore = async () => {
+    const result = await restorePurchases();
+    if (result.success) {
+      setPremium(true);
+    }
+    alert(result.message);
   };
 
   const isAdFreeActive = !isPremium && Date.now() < adFreeUntil;
@@ -134,25 +167,34 @@ export default function Home() {
                   )}
 
                   {!isPremium ? (
-                    <button
-                      onClick={togglePremiumDebug} // 本番ではIAP処理に置き換え
-                      className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Calculator className="w-5 h-5 text-yellow-500" />
-                        <div className="text-left">
-                          <div className="font-medium">プレミアムプラン</div>
-                          <div className="text-xs text-neutral-400">広告を永久に削除</div>
+                    <>
+                      <button
+                        onClick={handlePurchase}
+                        disabled={isPurchaseLoading}
+                        className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200 disabled:opacity-50"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Calculator className="w-5 h-5 text-yellow-500" />
+                          <div className="text-left">
+                            <div className="font-medium">プレミアムプラン</div>
+                            <div className="text-xs text-neutral-400">広告を永久に削除</div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="px-3 py-1 bg-neutral-700 rounded-full text-xs font-medium">
-                        ¥---
-                      </div>
-                    </button>
+                        <div className="px-3 py-1 bg-neutral-700 rounded-full text-xs font-medium">
+                          {isPurchaseLoading ? '...' : productPrice}
+                        </div>
+                      </button>
+                      <button
+                        onClick={handleRestore}
+                        className="w-full p-3 text-sm text-neutral-400 hover:text-white transition-colors"
+                      >
+                        購入履歴を復元
+                      </button>
+                    </>
                   ) : (
                     <div className="w-full p-4 bg-yellow-900/20 border border-yellow-800 rounded-xl flex items-center gap-3">
                       <Calculator className="w-5 h-5 text-yellow-500" />
-                      <span className="font-medium text-yellow-500">Premium Plan Active</span>
+                      <span className="font-medium text-yellow-500">プレミアムプラン有効</span>
                     </div>
                   )}
                 </div>
