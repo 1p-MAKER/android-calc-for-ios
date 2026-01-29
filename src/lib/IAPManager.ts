@@ -52,7 +52,7 @@ export async function initializeRevenueCat(): Promise<boolean> {
  */
 export async function getProductPrice(): Promise<string> {
     if (!isNative) {
-        return '¥---'; // Web環境
+        return '¥100'; // Web環境
     }
 
     try {
@@ -62,14 +62,14 @@ export async function getProductPrice(): Promise<string> {
 
         if (products.products && products.products.length > 0) {
             const product = products.products[0];
-            return product.priceString || '¥---';
+            return product.priceString || '¥100';
         }
 
         console.warn('[IAPManager] 商品情報が取得できませんでした');
-        return '¥---';
+        return '¥100';
     } catch (error) {
         console.error('[IAPManager] 商品情報取得エラー:', error);
-        return '¥---';
+        return '¥100';
     }
 }
 

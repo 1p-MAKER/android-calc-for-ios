@@ -26,7 +26,7 @@ export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isRewardLoading, setIsRewardLoading] = useState(false);
   const [isPurchaseLoading, setIsPurchaseLoading] = useState(false);
-  const [productPrice, setProductPrice] = useState('¥---');
+  const [productPrice, setProductPrice] = useState('¥100');
 
   // RevenueCat初期化と価格取得
   useEffect(() => {
