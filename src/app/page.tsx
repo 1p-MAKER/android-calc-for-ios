@@ -53,8 +53,12 @@ export default function Home() {
     }
   };
 
-  const openSupportPage = () => {
-    window.open('https://scented-zinc-a47.notion.site/2d9768aba03f80859597d0f99cdb1d5f', '_blank');
+  const openDeveloperPage = () => {
+    window.open('https://profile-portfolio-one-tau.vercel.app/', '_blank');
+  };
+
+  const openPrivacyPolicy = () => {
+    window.open('https://profile-portfolio-one-tau.vercel.app/privacy', '_blank');
   };
 
   const openOtherApps = () => {
@@ -234,12 +238,24 @@ export default function Home() {
                   <Share2 className="w-5 h-5 text-neutral-400" />
                 </button>
 
+                {/* Developer */}
                 <button
-                  onClick={openSupportPage}
+                  onClick={openDeveloperPage}
                   className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="font-medium text-left">サポート・プライバシーポリシー</span>
+                    <span className="font-medium text-left">開発者</span>
+                  </div>
+                  <ExternalLink className="w-5 h-5 text-neutral-400" />
+                </button>
+
+                {/* Privacy Policy */}
+                <button
+                  onClick={openPrivacyPolicy}
+                  className="w-full flex items-center justify-between p-4 bg-neutral-800 rounded-xl hover:bg-neutral-700 transition-colors active:scale-95 duration-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium text-left">プライバシーポリシー</span>
                   </div>
                   <ExternalLink className="w-5 h-5 text-neutral-400" />
                 </button>
