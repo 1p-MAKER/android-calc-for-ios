@@ -1,16 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import Display from '@/components/Display';
-import CalculatorButton from '@/components/CalculatorButton';
-import ScientificKeypad from '@/components/ScientificKeypad'; // コンポーネント名は既存に合わせる
-import { useCalculatorStore } from '@/store/calcStore';
+import { useState, useEffect } from 'react';
+import { Display } from '@/components/Display';
+import { CalculatorButton } from '@/components/CalculatorButton';
+import { ScientificKeypad } from '@/components/ScientificKeypad'; // コンポーネント名は既存に合わせる
+import { useCalculatorStore } from '@/store/calculatorStore';
 import { Settings, X, Trash2, History, RotateCcw } from 'lucide-react';
 import { useAdBanner } from '@/hooks/useAdBanner';
 import { AD_CONFIG, IAP_PRODUCT_ID } from '@/lib/AdConfig';
 import { IAPManager } from '@/lib/IAPManager';
 import { useAdStore } from '@/store/adStore';
-import HistoryList from '@/components/HistoryList';
+import { HistoryList } from '@/components/HistoryList';
 
 export default function Home() {
   const {
