@@ -285,7 +285,7 @@ export default function Home() {
           {/* 1. History Area (Portrait ONLY) */}
           <div className="flex-[0.5] w-full overflow-y-auto min-h-[15%] relative landscape:hidden flex flex-col">
             {/* Portrait Header with Settings */}
-            <div className="flex justify-between items-center px-4 py-3 sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-neutral-800/50">
+            <div className="flex justify-between items-center px-4 py-3 sticky top-[calc(env(safe-area-inset-top)+20px)] z-10 bg-black/90 backdrop-blur-sm border-b border-neutral-800/50">
               <div className="text-sm font-medium text-neutral-500">History</div>
               <button onClick={() => setIsSettingsOpen(true)} className="p-2 bg-neutral-800/50 rounded-full text-neutral-400 hover:text-white transition-colors">
                 <Settings className="w-5 h-5" />
