@@ -37,7 +37,7 @@ async function initialize(): Promise<void> {
 async function showBanner(): Promise<void> {
     if (!isNative) return;
     try {
-        const options: AdOptions = {
+        const options: BannerAdOptions = {
             adId: isIOS ? AD_CONFIG.BANNER_ID_IOS : AD_CONFIG.BANNER_ID_ANDROID,
             adSize: BannerAdSize.ADAPTIVE_BANNER,
             position: BannerAdPosition.BOTTOM_CENTER,
