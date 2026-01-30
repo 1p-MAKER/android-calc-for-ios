@@ -25,7 +25,6 @@ async function initialize(): Promise<void> {
 
     try {
         await AdMob.initialize({
-            requestTrackingAuthorization: true,
             testingDevices: AD_CONFIG.IS_TEST_MODE ? ['2077ef9a63d2b398840261c8221a0c9b'] : undefined,
             initializeForTesting: AD_CONFIG.IS_TEST_MODE,
         });
