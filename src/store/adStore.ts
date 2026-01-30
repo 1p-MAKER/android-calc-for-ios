@@ -1,6 +1,5 @@
 /**
  * adStore.ts - 広告状態管理 (Zustand)
- * Factory Protocol: 既存calculatorStoreとは分離し、Add方式で実装
  */
 
 import { create } from 'zustand';
@@ -9,50 +8,30 @@ import { AD_CONFIG, STORAGE_KEYS } from '@/lib/AdConfig';
 
 interface AdState {
     // State
-    isPremium: boolean;         // 課金済みフラグ
-    adFreeUntil: number;        // リワード報酬期限 (timestamp)
-    calcCount: number;          // 計算回数カウンター
+    isPremium: boolean;         // 課金判定用
+    adFreeUntil: number;        // リワード報酬期限
+    calcCount: number;
 
-    // Computed
-    shouldShowAds: () => boolean;
-    shouldShowInterstitial: () => boolean;
+    // Computed property replacement (Zustand doesn't have computed natively like Vue, but we can expose a getter or just a state)
+    isAdFree: boolean;
 
     // Actions
     incrementCalcCount: () => void;
     resetCalcCount: () => void;
-    setAdFreeUntil: (until: number) => void;
-    grantRewardAdFree: () => void;  // リワード視聴完了時
-    setPremium: (value: boolean) => void;
-    togglePremiumDebug: () => void; // デバッグ用
+    setAdFreeUntil: (timestamp: number) => void;
+    grantRewardAdFree: () => void;
+    setPremium: (active: boolean) => void;
+    checkAdStatus: () => void; // Call this often
 }
 
 export const useAdStore = create<AdState>()(
     persist(
         (set, get) => ({
-            // Initial State
             isPremium: false,
             adFreeUntil: 0,
             calcCount: 0,
+            isAdFree: false,
 
-            // Computed: 広告を表示すべきか判定
-            shouldShowAds: () => {
-                const { isPremium, adFreeUntil } = get();
-                // 課金済み、またはリワード報酬期間内なら広告を出さない
-                if (isPremium || Date.now() < adFreeUntil) {
-                    return false;
-                }
-                return true;
-            },
-
-            // Computed: インタースティシャルを表示すべきか判定
-            shouldShowInterstitial: () => {
-                const { calcCount, shouldShowAds } = get();
-                if (!shouldShowAds()) return false;
-                // 10回に1回
-                return calcCount > 0 && calcCount % AD_CONFIG.INTERSTITIAL_FREQUENCY === 0;
-            },
-
-            // Actions
             incrementCalcCount: () => {
                 set((state) => ({ calcCount: state.calcCount + 1 }));
             },
@@ -62,38 +41,31 @@ export const useAdStore = create<AdState>()(
             },
 
             setAdFreeUntil: (until: number) => {
-                set({ adFreeUntil: until });
+                const isFree = Date.now() < until;
+                set({ adFreeUntil: until, isAdFree: isFree || get().isPremium });
             },
 
             grantRewardAdFree: () => {
-                // デバッグモードの場合は短い期間を使用
                 const duration = AD_CONFIG.IS_TEST_MODE
                     ? AD_CONFIG.DEBUG_REWARD_DURATION_MS
                     : AD_CONFIG.REWARD_DURATION_MS;
                 const until = Date.now() + duration;
-                set({ adFreeUntil: until });
-                console.log('[AdStore] リワード報酬付与:', new Date(until).toLocaleString());
+                set({ adFreeUntil: until, isAdFree: true });
             },
 
-            setPremium: (value: boolean) => {
-                set({ isPremium: value });
+            setPremium: (active: boolean) => {
+                set({ isPremium: active, isAdFree: active || Date.now() < get().adFreeUntil });
             },
 
-            togglePremiumDebug: () => {
-                set((state) => {
-                    const newValue = !state.isPremium;
-                    console.log('[AdStore] Premium toggled (debug):', newValue);
-                    return { isPremium: newValue };
-                });
-            },
+            checkAdStatus: () => {
+                const { isPremium, adFreeUntil } = get();
+                const now = Date.now();
+                const isFree = isPremium || now < adFreeUntil;
+                set({ isAdFree: isFree });
+            }
         }),
         {
-            name: 'ad-storage', // localStorage key
-            partialize: (state) => ({
-                isPremium: state.isPremium,
-                adFreeUntil: state.adFreeUntil,
-                // calcCountはセッション毎にリセットするため永続化しない
-            }),
+            name: STORAGE_KEYS.AD_PREFS,
         }
     )
 );

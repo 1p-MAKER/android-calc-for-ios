@@ -1,224 +1,100 @@
 /**
  * AdManager.ts - AdMob操作の抽象化レイヤー
  * Factory Protocol: Manager/Config Pattern
+ * Export Pattern: Named Export of "AdManager" object
  */
 
-import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, AdOptions, RewardAdOptions, AdLoadInfo, AdMobRewardItem } from '@capacitor-community/admob';
+import { AdMob, BannerAdSize, BannerAdPosition, AdOptions, RewardAdOptions, AdLoadInfo, AdMobRewardItem } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { AD_CONFIG, BANNER_HEIGHT } from './AdConfig';
 import { AppTrackingTransparency } from 'capacitor-plugin-app-tracking-transparency';
 
-// Platform detection
 const isIOS = Capacitor.getPlatform() === 'ios';
-const isAndroid = Capacitor.getPlatform() === 'android';
-const isNative = isIOS || isAndroid;
+const isNative = Capacitor.isNativePlatform();
 
-/**
- * AdMob初期化
- */
-export async function initializeAdMob(): Promise<void> {
-    if (!isNative) {
-        console.log('[AdManager] Web環境のため初期化スキップ');
-        return;
-    }
+async function initialize(): Promise<void> {
+    if (!isNative) return;
 
-    // iOS: ATT (App Tracking Transparency) リクエスト
     if (isIOS) {
         try {
-            const { status } = await AppTrackingTransparency.requestPermission();
-            console.log('[AdManager] ATT Status:', status);
-        } catch (error) {
-            console.error('[AdManager] ATT Error:', error);
-            // ATT失敗でも広告初期化は継続
+            await AppTrackingTransparency.requestPermission();
+        } catch (e) {
+            console.warn('[AdManager] ATT Request Failed', e);
         }
     }
 
     try {
         await AdMob.initialize({
+            requestTrackingAuthorization: true,
+            testingDevices: AD_CONFIG.IS_TEST_MODE ? ['2077ef9a63d2b398840261c8221a0c9b'] : undefined,
             initializeForTesting: AD_CONFIG.IS_TEST_MODE,
         });
-        console.log('[AdManager] AdMob初期化完了');
-    } catch (error) {
-        console.error('[AdManager] AdMob初期化エラー:', error);
+        console.log('[AdManager] Initialized');
+    } catch (e) {
+        console.error('[AdManager] Init failed', e);
     }
 }
 
-/**
- * バナー広告を表示
- */
-export async function showBanner(): Promise<void> {
-    if (!isNative) {
-        console.log('[AdManager] Web環境のためバナースキップ');
-        // Web環境でもCSS変数を設定（開発時確認用）
-        updateBannerHeightCSS(BANNER_HEIGHT);
-        return;
-    }
-
-    const options: BannerAdOptions = {
-        adId: isIOS ? AD_CONFIG.BANNER_ID_IOS : AD_CONFIG.BANNER_ID_ANDROID,
-        adSize: BannerAdSize.BANNER,
-        position: BannerAdPosition.BOTTOM_CENTER,
-        margin: 0,
-        isTesting: AD_CONFIG.IS_TEST_MODE,
-    };
-
+async function showBanner(): Promise<void> {
+    if (!isNative) return;
     try {
-        // 楽観的にスペースを確保してから表示
-        updateBannerHeightCSS(BANNER_HEIGHT);
+        const options: AdOptions = {
+            adId: isIOS ? AD_CONFIG.BANNER_ID_IOS : AD_CONFIG.BANNER_ID_ANDROID,
+            adSize: BannerAdSize.ADAPTIVE_BANNER,
+            position: BannerAdPosition.BOTTOM_CENTER,
+            margin: 0,
+            isTesting: AD_CONFIG.IS_TEST_MODE,
+        };
         await AdMob.showBanner(options);
-        console.log('[AdManager] バナー表示成功');
-    } catch (error) {
-        console.error('[AdManager] バナー表示エラー:', error);
-        // 失敗したら元に戻す
-        updateBannerHeightCSS(0);
+
+        // CSS変数セット
+        document.documentElement.style.setProperty('--banner-height', BANNER_HEIGHT);
+    } catch (e) {
+        console.error('[AdManager] Show Banner failed', e);
     }
 }
 
-/**
- * バナー広告を非表示
- */
-export async function hideBanner(): Promise<void> {
-    if (!isNative) {
-        updateBannerHeightCSS(0);
-        return;
-    }
-
+async function hideBanner(): Promise<void> {
+    if (!isNative) return;
     try {
         await AdMob.hideBanner();
-        updateBannerHeightCSS(0);
-        console.log('[AdManager] バナー非表示成功');
-    } catch (error) {
-        console.error('[AdManager] バナー非表示エラー:', error);
-    }
-}
-
-/**
- * バナー広告を削除
- */
-export async function removeBanner(): Promise<void> {
-    if (!isNative) {
-        updateBannerHeightCSS(0);
-        return;
-    }
-
-    try {
         await AdMob.removeBanner();
-        updateBannerHeightCSS(0);
-        console.log('[AdManager] バナー削除成功');
-    } catch (error) {
-        console.error('[AdManager] バナー削除エラー:', error);
+        document.documentElement.style.setProperty('--banner-height', '0px');
+    } catch (e) {
+        console.warn('[AdManager] Hide error', e);
     }
 }
 
-/**
- * インタースティシャル広告をプリロード
- */
-export async function prepareInterstitial(): Promise<void> {
-    if (!isNative) return;
-
-    const options: AdOptions = {
-        adId: isIOS ? AD_CONFIG.INTERSTITIAL_ID_IOS : AD_CONFIG.INTERSTITIAL_ID_ANDROID,
-        isTesting: AD_CONFIG.IS_TEST_MODE,
-    };
-
-    try {
-        await AdMob.prepareInterstitial(options);
-        console.log('[AdManager] インタースティシャルプリロード完了');
-    } catch (error) {
-        console.error('[AdManager] インタースティシャルプリロードエラー:', error);
-    }
-}
-
-/**
- * インタースティシャル広告を表示
- */
-export async function showInterstitial(): Promise<void> {
+async function showRewardVideo(onReward: (reward: AdMobRewardItem) => void): Promise<void> {
     if (!isNative) {
-        console.log('[AdManager] Web環境のためインタースティシャルスキップ');
-        return;
-    }
-
-    try {
-        await AdMob.showInterstitial();
-        console.log('[AdManager] インタースティシャル表示成功');
-        // 次回のためにプリロード
-        await prepareInterstitial();
-    } catch (error) {
-        console.error('[AdManager] インタースティシャル表示エラー:', error);
-        // 失敗時も再プリロード試行
-        await prepareInterstitial();
-    }
-}
-
-/**
- * リワード動画広告をプリロード
- */
-export async function prepareRewardVideo(): Promise<void> {
-    if (!isNative) return;
-
-    const options: RewardAdOptions = {
-        adId: isIOS ? AD_CONFIG.REWARD_ID_IOS : AD_CONFIG.REWARD_ID_ANDROID,
-        isTesting: AD_CONFIG.IS_TEST_MODE,
-    };
-
-    try {
-        await AdMob.prepareRewardVideoAd(options);
-        console.log('[AdManager] リワード動画プリロード完了');
-    } catch (error) {
-        console.error('[AdManager] リワード動画プリロードエラー:', error);
-    }
-}
-
-/**
- * リワード動画広告を表示
- * @param onReward 報酬付与時のコールバック
- */
-export async function showRewardVideo(onReward: (reward: AdMobRewardItem) => void): Promise<void> {
-    if (!isNative) {
-        console.log('[AdManager] Web環境のためリワード動画スキップ (デバッグ報酬付与)');
-        // Web環境でもデバッグ用に報酬付与
         onReward({ type: 'debug', amount: 1 });
         return;
     }
 
-    // リスナー登録 (非同期のためawait)
-    const rewardListener = await AdMob.addListener(
-        'onRewardedVideoAdReward' as never,
-        (reward: AdMobRewardItem) => {
-            console.log('[AdManager] リワード獲得:', reward);
-            onReward(reward);
-        }
-    );
-
     try {
+        const options: RewardAdOptions = {
+            adId: isIOS ? AD_CONFIG.REWARD_ID_IOS : AD_CONFIG.REWARD_ID_ANDROID,
+            isTesting: AD_CONFIG.IS_TEST_MODE,
+        };
+
+        await AdMob.prepareRewardVideoAd(options);
+
+        const rewardListener = AdMob.addListener('onRewardVideoRewardReceived', (reward: AdMobRewardItem) => {
+            onReward(reward);
+            rewardListener.remove();
+        });
+
         await AdMob.showRewardVideoAd();
-        console.log('[AdManager] リワード動画表示成功');
-        // リスナー解除
-        rewardListener.remove();
-        // 次回のためにプリロード
-        await prepareRewardVideo();
-    } catch (error) {
-        console.error('[AdManager] リワード動画表示エラー:', error);
-        rewardListener.remove();
-        // 失敗時も再プリロード試行
-        await prepareRewardVideo();
+    } catch (e) {
+        console.error('[AdManager] Reward Video failed', e);
+        // Fallback for user experience in case of ad failure
+        // onReward({ type: 'fallback', amount: 1 }); 
     }
 }
 
-
-/**
- * CSS変数 --banner-height を更新
- */
-function updateBannerHeightCSS(height: number): void {
-    document.documentElement.style.setProperty('--banner-height', `${height}px`);
-}
-
-/**
- * 広告のプリロードを一括実行
- */
-export async function preloadAds(): Promise<void> {
-    await Promise.all([
-        prepareInterstitial(),
-        prepareRewardVideo(),
-    ]);
-}
+export const AdManager = {
+    initialize,
+    showBanner,
+    hideBanner,
+    showRewardVideo
+};
