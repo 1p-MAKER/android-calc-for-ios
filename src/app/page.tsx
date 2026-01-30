@@ -117,7 +117,7 @@ export default function Home() {
         bg-ios-bg: 背景色統一
         z-10: 前面確保
       */}
-      <div className="w-full mt-auto pb-[55px] bg-ios-bg z-10">
+      <div className="w-full mt-auto pb-[env(safe-area-inset-bottom)] bg-ios-bg z-10">
 
         {/* Landscape Wrapper */}
         <div className="flex w-full h-full landscape:px-8 gap-2">
