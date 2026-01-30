@@ -1,0 +1,16 @@
+{
+    "settings": {
+        "adFreeTitle": "動画を見て広告なし",
+        "adFreeDesc": "24時間限定 (Free)",
+        "premiumTitle": "プレミアムプラン",
+        "premiumDesc": "広告を永久に削除",
+        "restore": "購入履歴を復元",
+        "vibration": "キー操作バイブ",
+        "sound": "キー操作音",
+        "otherApps": "その他のアプリ",
+        "share": "このアプリを共有する",
+        "developer": "開発者",
+        "privacy": "プライバシーポリシー",
+        "close": "閉じる"
+    }
+}

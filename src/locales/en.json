@@ -1,0 +1,16 @@
+{
+    "settings": {
+        "adFreeTitle": "Watch Video for Ad-Free",
+        "adFreeDesc": "24 Hours (Free)",
+        "premiumTitle": "Premium Plan",
+        "premiumDesc": "Remove ads forever",
+        "restore": "Restore Purchases",
+        "vibration": "Haptic Feedback",
+        "sound": "Keypad Sound",
+        "otherApps": "More Apps",
+        "share": "Share App",
+        "developer": "Developer",
+        "privacy": "Privacy Policy",
+        "close": "Close"
+    }
+}
