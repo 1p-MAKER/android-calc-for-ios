@@ -121,7 +121,7 @@ export default function Home() {
     <div className="h-screen w-screen overflow-hidden flex flex-col bg-ios-bg relative">
 
       {/* App Content: Takes remaining space */}
-      <div className="flex-1 w-full flex flex-col landscape:flex-row relative min-h-0 pt-[calc(env(safe-area-inset-top)+4px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] pb-[60px] landscape:pb-[env(safe-area-inset-bottom)]">
+      <div className="flex-1 w-full flex flex-col landscape:flex-row relative min-h-0 pt-[calc(env(safe-area-inset-top)+4px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] pb-[50px] landscape:pb-[env(safe-area-inset-bottom)]">
 
         {/* Settings Modal */}
         {isSettingsOpen && (
