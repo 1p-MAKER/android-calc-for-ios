@@ -121,7 +121,7 @@ export default function Home() {
     <div className="h-screen w-screen overflow-hidden flex flex-col bg-ios-bg relative">
 
       {/* App Content: Takes remaining space */}
-      <div className="flex-1 w-full flex flex-col justify-end landscape:flex-row relative min-h-0 pt-[calc(env(safe-area-inset-top)+4px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] pb-[calc(env(safe-area-inset-bottom)+50px)] landscape:pb-[env(safe-area-inset-bottom)]">
+      <div className="flex-1 w-full flex flex-col justify-end gap-0 landscape:flex-row relative min-h-0 pt-[calc(env(safe-area-inset-top)+4px)] landscape:pt-[max(env(safe-area-inset-top),1rem)] pl-[env(safe-area-inset-left)] landscape:pl-[max(env(safe-area-inset-left),1.5rem)] pr-[env(safe-area-inset-right)] landscape:pr-[max(env(safe-area-inset-right),1.5rem)] pb-[calc(env(safe-area-inset-bottom)+50px)] landscape:pb-[env(safe-area-inset-bottom)]">
 
         {/* Settings Modal */}
         {isSettingsOpen && (
@@ -299,12 +299,12 @@ export default function Home() {
           </div>
 
           {/* 2. Display Area */}
-          <div className="w-full px-4 landscape:px-8 mx-auto flex-shrink-0 mb-2 landscape:mb-0 z-10 bg-ios-bg flex flex-col justify-end landscape:h-[25%] md:landscape:h-[30%]">
+          <div className="w-full px-4 landscape:px-8 mx-auto flex-shrink-0 mb-0 landscape:mb-0 z-10 bg-ios-bg flex flex-col justify-end landscape:h-[25%] md:landscape:h-[30%]">
             <Display />
           </div>
 
           {/* 3. Keypad Area (Fills remaining space) */}
-          <div className="flex-1 w-full min-h-0 z-20 bg-ios-bg pb-safe-offset landscape:pb-4 flex flex-col justify-end">
+          <div className="flex-1 w-full min-h-0 z-20 bg-ios-bg pb-0 landscape:pb-4 flex flex-col justify-end">
             <div className="flex flex-row w-full h-full landscape:px-8 gap-2 mx-auto">
               <div className="flex-1 hidden landscape:block h-full">
                 <ScientificKeypad />
