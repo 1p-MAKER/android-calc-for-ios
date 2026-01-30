@@ -17,9 +17,7 @@ export default function Home() {
     append,
     deleteLast,
     clear,
-    value,
-    history,
-    clearHistory
+    history
   } = useCalculatorStore();
 
   const { isAdFree, setAdFreeUntil } = useAdStore();
