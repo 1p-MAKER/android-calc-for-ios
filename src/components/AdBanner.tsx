@@ -25,10 +25,10 @@ export const AdBanner = () => {
         init();
 
         return () => {
-        }, [shouldShowAds]);
+            // お掃除
+            AdManager.hideBanner().catch(() => { });
+        };
+    }, [isAdFree]);
 
-    // このコンポーネント自体は何もレンダリングしない
-    // バナーはネイティブレイヤーで表示される
-    // CSS変数 --banner-height はAdManager内で制御
-    return null;
+    return null; // ネイティブ広告なのでDOMは描画しない
 };
