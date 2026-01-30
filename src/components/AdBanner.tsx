@@ -7,39 +7,25 @@
 
 import { useEffect } from 'react';
 import { useAdStore } from '@/store/adStore';
-import { showBanner, hideBanner, removeBanner, initializeAdMob, preloadAds } from '@/lib/AdManager';
+import { AdManager } from '@/lib/AdManager';
 
 export const AdBanner = () => {
-    const shouldShowAds = useAdStore((state) => state.shouldShowAds);
+    const { isAdFree } = useAdStore();
 
     useEffect(() => {
-        // AdMob初期化
+        // 初期化と表示
         const init = async () => {
-            await initializeAdMob();
-            await preloadAds();
-
-            // 広告表示判定
-            if (shouldShowAds()) {
-                await showBanner();
+            if (!isAdFree) {
+                await AdManager.initialize();
+                await AdManager.showBanner();
+            } else {
+                await AdManager.hideBanner();
             }
         };
-
         init();
 
-        // クリーンアップ
         return () => {
-            removeBanner();
-        };
-    }, []);
-
-    // shouldShowAds の変化を監視してバナー表示/非表示を制御
-    useEffect(() => {
-        if (shouldShowAds()) {
-            showBanner();
-        } else {
-            hideBanner();
-        }
-    }, [shouldShowAds]);
+        }, [shouldShowAds]);
 
     // このコンポーネント自体は何もレンダリングしない
     // バナーはネイティブレイヤーで表示される
